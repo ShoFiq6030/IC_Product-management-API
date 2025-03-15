@@ -1,10 +1,42 @@
 const Product = require("../models/product.model");
 
-// Get all products
+// Get all products with filtering, sorting, and pagination
 exports.getProducts = async (req, res) => {
     try {
-        const products = await Product.find();
-        res.status(200).json(products);
+        const { category, price, page = 1, limit = 10 } = req.query;
+
+        // Filtering by category
+        let filter = {};
+        if (category) {
+            filter.category = category;
+        }
+
+        // Sorting by price (asc or desc)
+        let sortOption = {};
+        if (price) {
+            if (price === "asc") {
+                sortOption.price = 1;
+            } else if (price === "desc") {
+                sortOption.price = -1;
+            }
+        }
+
+        // Pagination
+        const skip = (page - 1) * limit;
+
+        const products = await Product.find(filter)
+            .sort(sortOption)
+            .skip(skip)
+            .limit(Number(limit));
+
+        const totalProducts = await Product.countDocuments(filter);
+
+        res.status(200).json({
+            total: totalProducts,
+            page: Number(page),
+            limit: Number(limit),
+            products
+        });
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }
@@ -13,7 +45,12 @@ exports.getProducts = async (req, res) => {
 // Get a single product by ID
 exports.getProductById = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const productId = req.params.id
+        if (!productId.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(400).json({ message: "Invalid product ID" });
+        }
+
+        const product = await Product.findById(productId);
         if (!product) return res.status(404).json({ message: "Product not found" });
         res.status(200).json(product);
     } catch (error) {

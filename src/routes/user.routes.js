@@ -1,8 +1,18 @@
-const express = require("express");
-const { helloWorld } = require("../controllers/user.controller");
-const { helloMiddleware } = require("../middlewares/hello.middleware");
-const router = express.Router();
+const User = require("../models/user.model");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const { register, login } = require("../controllers/user.controller");
+const { authenticate } = require("../middlewares/user.middleware");
 
-router.get("/", helloMiddleware, helloWorld);
+const router = require("express").Router();
+
+// Register User
+router.post("/register", register);
+
+// Login User
+router.post("/login", login);
 
 module.exports = router;
+
+
+

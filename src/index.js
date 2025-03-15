@@ -2,12 +2,15 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const bodyParser = require('body-parser');
 
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
+app.use(bodyParser.json());
+// Middleware to parse URL-encoded bodies (from HTML forms)
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Database
 const mongoose = require('mongoose')
@@ -27,7 +30,7 @@ app.get("/", (req, res) => {
     res.send("<h1 style='text-align: center; font-size: 50px'>Hello World!</h1>");
 });
 
-// app.use("/api/user", require("./routes/user.routes"));
+app.use("/api/user", require("./routes/user.routes"));
 app.use("/api/products", require("./routes/product.routes"));
 
 // Error Handling Middleware
