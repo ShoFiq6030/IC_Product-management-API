@@ -24,8 +24,8 @@ app.get("/", (req, res) => {
     res.send("<h1 style='text-align: center; font-size: 50px'>Hello From Product Inventory API</h1>");
 });
 
-app.use("/api/user", require("./routes/user.routes"));
-app.use("/api/products", require("./routes/product.routes"));
+app.use("/api/user", require("./src/routes/user.routes"));
+app.use("/api/products", require("./src/routes/product.routes"));
 
 // ✅ Handle 404 errors
 app.use("*", (req, res) => {
