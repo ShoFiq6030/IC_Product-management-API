@@ -2,6 +2,12 @@
 
 Welcome to the **IC_Product Inventory Management API** documentation. This API provides a set of endpoints to manage product inventories, including creating, retrieving, updating, and deleting products.
 
+## API Full Documentation 
+```
+https://documenter.getpostman.com/view/26622927/2sAYkBtMp5
+```
+
+
 ## Base URL
 
 The base URL for all API requests is:
